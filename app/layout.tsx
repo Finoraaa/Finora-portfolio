@@ -42,6 +42,7 @@ export const viewport: Viewport = {
 import { Toaster } from 'sonner'
 import { BackgroundEffects } from '@/components/background-effects'
 import { CustomCursor } from '@/components/custom-cursor'
+import { Loader } from '@/components/loader'
 
 export default function RootLayout({
   children,
@@ -51,6 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased relative md:cursor-none`}>
+        <Loader />
         <CustomCursor />
         <BackgroundEffects />
         {children}
