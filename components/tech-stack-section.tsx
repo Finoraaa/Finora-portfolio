@@ -1,35 +1,49 @@
-import { translations, type Lang } from "@/lib/translations"
+import {
+  Code2,
+  Cpu,
+  Layers,
+  FileJson,
+  Wind,
+  Atom,
+  Server,
+  MessageSquare,
+  Binary
+} from "lucide-react"
 
 const techStack = [
-  { name: "Python", color: "neon-green" as const },
-  { name: "TypeScript", color: "neon-purple" as const },
-  { name: "Next.js", color: "neon-green" as const },
-  { name: "AI Integration", color: "neon-purple" as const },
-  { name: "React", color: "neon-green" as const },
-  { name: "Node.js", color: "neon-purple" as const },
-  { name: "Discord.py", color: "neon-green" as const },
-  { name: "Tailwind CSS", color: "neon-purple" as const },
+  { name: "Python", color: "neon-green" as const, icon: <Binary className="h-4 w-4" /> },
+  { name: "TypeScript", color: "neon-purple" as const, icon: <FileJson className="h-4 w-4" /> },
+  { name: "Next.js", color: "neon-green" as const, icon: <Layers className="h-4 w-4" /> },
+  { name: "AI Integration", color: "neon-purple" as const, icon: <Cpu className="h-4 w-4" /> },
+  { name: "React", color: "neon-green" as const, icon: <Atom className="h-4 w-4" /> },
+  { name: "Node.js", color: "neon-purple" as const, icon: <Server className="h-4 w-4" /> },
+  { name: "Discord.py", color: "neon-green" as const, icon: <MessageSquare className="h-4 w-4" /> },
+  { name: "Tailwind CSS", color: "neon-purple" as const, icon: <Wind className="h-4 w-4" /> },
 ]
 
-function TechBadge({ name, color }: { name: string; color: "neon-purple" | "neon-green" }) {
+import { translations, type Lang } from "@/lib/translations"
+import { ScrollReveal } from "@/components/scroll-reveal"
+import { Magnetic } from "@/components/magnetic"
+import type { ReactNode } from "react"
+
+function TechBadge({ name, color, icon }: { name: string; color: "neon-purple" | "neon-green"; icon: ReactNode }) {
   const isPurple = color === "neon-purple"
   return (
     <div
-      className={`flex shrink-0 items-center gap-2 rounded-full border px-5 py-2 ${
-        isPurple
+      className={`flex shrink-0 items-center gap-2 rounded-full border px-5 py-2 ${isPurple
           ? "border-neon-purple/20 bg-neon-purple/5"
           : "border-neon-green/20 bg-neon-green/5"
-      }`}
+        }`}
     >
       <span
-        className={`h-1.5 w-1.5 rounded-full ${
-          isPurple ? "bg-neon-purple shadow-[0_0_6px_rgba(168,85,247,0.6)]" : "bg-neon-green shadow-[0_0_6px_rgba(34,197,94,0.6)]"
-        }`}
-      />
+        className={`${isPurple ? "text-neon-purple" : "text-neon-green"
+          } transition-transform group-hover:scale-110`}
+      >
+        {icon}
+      </span>
       <span
-        className={`font-mono text-sm font-medium ${
-          isPurple ? "text-neon-purple" : "text-neon-green"
-        }`}
+        className={`font-mono text-sm font-medium ${isPurple ? "text-neon-purple" : "text-neon-green"
+          }`}
       >
         {name}
       </span>
@@ -57,9 +71,13 @@ export function TechStackSection({ lang }: { lang: Lang }) {
         {/* Right fade */}
         <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-24 bg-gradient-to-l from-background to-transparent md:w-40" />
 
-        <div className="flex gap-4 animate-marquee" style={{ width: "max-content" }}>
+        <div className="flex gap-4 animate-marquee hover:pause" style={{ width: "max-content" }}>
           {doubled.map((tech, index) => (
-            <TechBadge key={`${tech.name}-${index}`} name={tech.name} color={tech.color} />
+            <Magnetic key={`${tech.name}-${index}`} strength={0.15}>
+              <div>
+                <TechBadge name={tech.name} color={tech.color} icon={tech.icon} />
+              </div>
+            </Magnetic>
           ))}
         </div>
       </div>

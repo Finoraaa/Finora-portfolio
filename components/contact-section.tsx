@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Send, CheckCircle2, Github, Instagram } from "lucide-react"
+import { Send, CheckCircle2, Github, Instagram, Twitter } from "lucide-react"
 import { translations, type Lang } from "@/lib/translations"
 import { submitContactForm } from "@/app/actions/contact"
 import { toast } from "sonner"
@@ -212,6 +212,21 @@ export function ContactSection({ lang }: { lang: Lang }) {
                 <div>
                   <span className="text-sm font-medium text-foreground">Instagram</span>
                   <p className="font-mono text-[11px] text-muted-foreground">@__finora__</p>
+                </div>
+              </a>
+
+              <a
+                href="https://x.com/Furkan_Denizzz"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 rounded-lg border border-border bg-secondary p-3.5 transition-all hover:border-neon-purple/40 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-md bg-neon-purple/10 transition-colors group-hover:bg-neon-purple/20">
+                  <Twitter className="h-4 w-4 text-neon-purple" />
+                </div>
+                <div>
+                  <span className="text-sm font-medium text-foreground">X (Twitter)</span>
+                  <p className="font-mono text-[11px] text-muted-foreground">twitter.com/Furkan_Denizzz</p>
                 </div>
               </a>
             </div>

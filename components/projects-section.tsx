@@ -3,6 +3,7 @@
 import { Bot, Terminal, Activity, Code } from "lucide-react"
 import { translations, type Lang } from "@/lib/translations"
 import type { ReactNode } from "react"
+import { ScrollReveal } from "@/components/scroll-reveal"
 
 const projectIcons: ReactNode[] = [
   <Bot key="bot" className="h-6 w-6" />,
@@ -23,7 +24,7 @@ function ProjectCard({
   title: string
   description: string
   icon: ReactNode
-  tags: string[]
+  tags: readonly string[]
   accentColor: "purple" | "green"
 }) {
   const isPurple = accentColor === "purple"
@@ -74,7 +75,7 @@ export function ProjectsSection({ lang }: { lang: Lang }) {
       <div className="pointer-events-none absolute left-0 top-1/2 h-[500px] w-[300px] -translate-y-1/2 rounded-full bg-neon-purple/3 blur-[120px]" />
 
       <div className="mx-auto max-w-6xl">
-        <div className="mb-16 text-center">
+        <ScrollReveal animation="fade-up" className="mb-16 text-center">
           <span className="mb-4 inline-block font-mono text-xs uppercase tracking-widest text-neon-purple">
             {t.sectionLabel[lang]}
           </span>
@@ -82,18 +83,23 @@ export function ProjectsSection({ lang }: { lang: Lang }) {
           <p className="mx-auto max-w-lg text-muted-foreground">
             {t.sectionDescription[lang]}
           </p>
-        </div>
+        </ScrollReveal>
 
         <div className="grid gap-6 md:grid-cols-2">
           {t.items.map((project, index) => (
-            <ProjectCard
+            <ScrollReveal
               key={project.title}
-              title={project.title}
-              description={project.description[lang]}
-              icon={projectIcons[index]}
-              tags={project.tags}
-              accentColor={accentColors[index]}
-            />
+              delay={index * 150}
+              animation={index % 2 === 0 ? "fade-right" : "fade-left"}
+            >
+              <ProjectCard
+                title={project.title}
+                description={project.description[lang]}
+                icon={projectIcons[index]}
+                tags={project.tags}
+                accentColor={accentColors[index]}
+              />
+            </ScrollReveal>
           ))}
         </div>
       </div>
