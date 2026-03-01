@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
-import { Menu, X, Globe } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Menu, X, Globe, Sun, Moon } from "lucide-react"
+import { useTheme } from "next-themes"
 import { translations, type Lang } from "@/lib/translations"
 import { Magnetic } from "@/components/magnetic"
 
@@ -12,7 +13,14 @@ interface NavbarProps {
 
 export function Navbar({ lang, setLang }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const { theme, setTheme } = useTheme()
   const t = translations.nav
+
+  // Avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
@@ -65,6 +73,15 @@ export function Navbar({ lang, setLang }: NavbarProps) {
                   }`}
               />
             </div>
+          </button>
+
+          {/* Theme Toggle */}
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-secondary text-muted-foreground transition-all hover:border-neon-purple/50 hover:text-neon-purple hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]"
+            aria-label="Toggle theme"
+          >
+            {mounted && (theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />)}
           </button>
 
           <Magnetic strength={0.3}>
@@ -134,32 +151,44 @@ export function Navbar({ lang, setLang }: NavbarProps) {
               GitHub
             </a>
 
-            {/* Mobile Language Toggle */}
-            <button
-              onClick={() => setLang(lang === "EN" ? "TR" : "EN")}
-              className="flex items-center gap-2 rounded-full border border-border bg-secondary p-1 self-start transition-all"
-              aria-label={`Switch language to ${lang === "EN" ? "Turkish" : "English"}`}
-            >
-              <Globe className="ml-1.5 h-3.5 w-3.5 text-muted-foreground" />
-              <div className="relative flex items-center rounded-full bg-background/50 text-[11px] font-mono font-medium">
-                <span
-                  className={`relative z-10 px-2.5 py-1 rounded-full transition-all duration-300 ${lang === "EN" ? "text-neon-purple" : "text-muted-foreground"
-                    }`}
-                >
-                  EN
-                </span>
-                <span
-                  className={`relative z-10 px-2.5 py-1 rounded-full transition-all duration-300 ${lang === "TR" ? "text-neon-purple" : "text-muted-foreground"
-                    }`}
-                >
-                  TR
-                </span>
-                <span
-                  className={`absolute top-0.5 bottom-0.5 w-[calc(50%-2px)] rounded-full bg-neon-purple/10 border border-neon-purple/30 transition-all duration-300 ease-out ${lang === "EN" ? "left-0.5" : "left-[calc(50%+1px)]"
-                    }`}
-                />
-              </div>
-            </button>
+            {/* Mobile Toggles */}
+            <div className="flex items-center gap-3">
+              {/* Mobile Language Toggle */}
+              <button
+                onClick={() => setLang(lang === "EN" ? "TR" : "EN")}
+                className="flex items-center gap-2 rounded-full border border-border bg-secondary p-1 transition-all"
+                aria-label={`Switch language to ${lang === "EN" ? "Turkish" : "English"}`}
+              >
+                <Globe className="ml-1.5 h-3.5 w-3.5 text-muted-foreground" />
+                <div className="relative flex items-center rounded-full bg-background/50 text-[11px] font-mono font-medium">
+                  <span
+                    className={`relative z-10 px-2.5 py-1 rounded-full transition-all duration-300 ${lang === "EN" ? "text-neon-purple" : "text-muted-foreground"
+                      }`}
+                  >
+                    EN
+                  </span>
+                  <span
+                    className={`relative z-10 px-2.5 py-1 rounded-full transition-all duration-300 ${lang === "TR" ? "text-neon-purple" : "text-muted-foreground"
+                      }`}
+                  >
+                    TR
+                  </span>
+                  <span
+                    className={`absolute top-0.5 bottom-0.5 w-[calc(50%-2px)] rounded-full bg-neon-purple/10 border border-neon-purple/30 transition-all duration-300 ease-out ${lang === "EN" ? "left-0.5" : "left-[calc(50%+1px)]"
+                      }`}
+                  />
+                </div>
+              </button>
+
+              {/* Mobile Theme Toggle */}
+              <button
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-secondary text-muted-foreground transition-all"
+                aria-label="Toggle theme"
+              >
+                {mounted && (theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />)}
+              </button>
+            </div>
           </div>
         </div>
       )}

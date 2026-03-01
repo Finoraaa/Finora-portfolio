@@ -43,6 +43,7 @@ import { Toaster } from 'sonner'
 import { BackgroundEffects } from '@/components/background-effects'
 import { CustomCursor } from '@/components/custom-cursor'
 import { Loader } from '@/components/loader'
+import { ThemeProvider } from '@/components/theme-provider'
 
 export default function RootLayout({
   children,
@@ -50,14 +51,21 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased relative md:cursor-none`}>
-        <Loader />
-        <CustomCursor />
-        <BackgroundEffects />
-        {children}
-        <Toaster position="top-center" richColors />
-        <Analytics />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Loader />
+          <CustomCursor />
+          <BackgroundEffects />
+          {children}
+          <Toaster position="top-center" richColors />
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   )
