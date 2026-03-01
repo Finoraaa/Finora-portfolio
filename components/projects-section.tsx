@@ -1,6 +1,7 @@
 "use client"
 
 import { Bot, Terminal, Activity, Code } from "lucide-react"
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { translations, type Lang } from "@/lib/translations"
 import type { ReactNode } from "react"
 import { ScrollReveal } from "@/components/scroll-reveal"
@@ -28,41 +29,89 @@ function ProjectCard({
   accentColor: "purple" | "green"
 }) {
   const isPurple = accentColor === "purple"
-  const glowColor = isPurple
-    ? "hover:shadow-[0_0_40px_rgba(168,85,247,0.15)]"
-    : "hover:shadow-[0_0_40px_rgba(34,197,94,0.15)]"
+  const glowShadow = isPurple
+    ? "rgba(168, 85, 247, 0.15)"
+    : "rgba(34, 197, 94, 0.15)"
   const borderHover = isPurple ? "hover:border-neon-purple/40" : "hover:border-neon-green/40"
   const iconColor = isPurple ? "text-neon-purple" : "text-neon-green"
   const iconBg = isPurple ? "bg-neon-purple/10 border-neon-purple/20" : "bg-neon-green/10 border-neon-green/20"
   const tagBorder = isPurple ? "border-neon-purple/20 text-neon-purple" : "border-neon-green/20 text-neon-green"
 
+  // 3D Tilt Hook Logic
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+
+  const mouseXSpring = useSpring(x)
+  const mouseYSpring = useSpring(y)
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["12deg", "-12deg"])
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-12deg", "12deg"])
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const width = rect.width
+    const height = rect.height
+    const mouseX = e.clientX - rect.left
+    const mouseY = e.clientY - rect.top
+    const xPct = mouseX / width - 0.5
+    const yPct = mouseY / height - 0.5
+    x.set(xPct)
+    y.set(yPct)
+  }
+
+  const handleMouseLeave = () => {
+    x.set(0)
+    y.set(0)
+  }
+
   return (
-    <div
-      className={`group relative rounded-xl border border-border bg-card/50 p-6 backdrop-blur-sm transition-all duration-500 ${glowColor} ${borderHover}`}
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateY,
+        rotateX,
+        transformStyle: "preserve-3d",
+      }}
+      className={`group relative rounded-xl border border-border bg-card/50 p-6 backdrop-blur-sm transition-colors duration-500 ${borderHover}`}
     >
-      {/* Corner accent */}
       <div
-        className={`absolute right-0 top-0 h-px w-12 ${isPurple ? "bg-neon-purple/40" : "bg-neon-green/40"} transition-all duration-500 group-hover:w-20`}
-      />
-      <div
-        className={`absolute right-0 top-0 h-12 w-px ${isPurple ? "bg-neon-purple/40" : "bg-neon-green/40"} transition-all duration-500 group-hover:h-20`}
-      />
+        style={{ transform: "translateZ(50px)", transformStyle: "preserve-3d" }}
+        className="relative"
+      >
+        {/* Corner accent */}
+        <div
+          className={`absolute right-[-10px] top-[-10px] h-px w-12 ${isPurple ? "bg-neon-purple/40" : "bg-neon-green/40"} transition-all duration-500 group-hover:w-20`}
+        />
+        <div
+          className={`absolute right-[-10px] top-[-10px] h-12 w-px ${isPurple ? "bg-neon-purple/40" : "bg-neon-green/40"} transition-all duration-500 group-hover:h-20`}
+        />
 
-      <div className={`mb-4 inline-flex rounded-lg border p-2.5 ${iconBg}`}>
-        <span className={iconColor}>{icon}</span>
+        <div className={`mb-4 inline-flex rounded-lg border p-2.5 ${iconBg}`}>
+          <span className={iconColor}>{icon}</span>
+        </div>
+
+        <h3 className="mb-2 text-lg font-semibold text-foreground">{title}</h3>
+        <p className="mb-4 text-sm leading-relaxed text-muted-foreground">{description}</p>
+
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span key={tag} className={`rounded-md border px-2.5 py-0.5 font-mono text-xs ${tagBorder}`}>
+              {tag}
+            </span>
+          ))}
+        </div>
       </div>
 
-      <h3 className="mb-2 text-lg font-semibold text-foreground">{title}</h3>
-      <p className="mb-4 text-sm leading-relaxed text-muted-foreground">{description}</p>
-
-      <div className="flex flex-wrap gap-2">
-        {tags.map((tag) => (
-          <span key={tag} className={`rounded-md border px-2.5 py-0.5 font-mono text-xs ${tagBorder}`}>
-            {tag}
-          </span>
-        ))}
-      </div>
-    </div>
+      {/* Background Glow */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 rounded-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        style={{
+          background: `radial-gradient(circle at center, ${glowShadow}, transparent 70%)`,
+          transform: "translateZ(-10px)"
+        }}
+      />
+    </motion.div>
   )
 }
 
