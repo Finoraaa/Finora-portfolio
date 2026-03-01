@@ -14,7 +14,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Finora | Engineering the Future',
+  title: 'Finora',
   description: 'Finora is an innovative software development brand and tech lab building advanced software solutions, from OSINT tools to modern web apps.',
   icons: {
     icon: [
