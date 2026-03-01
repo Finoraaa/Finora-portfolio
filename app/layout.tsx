@@ -40,6 +40,7 @@ export const viewport: Viewport = {
 }
 
 import { Toaster } from 'sonner'
+import { BackgroundEffects } from '@/components/background-effects'
 
 export default function RootLayout({
   children,
@@ -48,7 +49,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased relative`}>
+        <BackgroundEffects />
         {children}
         <Toaster position="top-center" richColors />
         <Analytics />
