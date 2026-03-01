@@ -26,11 +26,17 @@ export function Navbar({ lang, setLang }: NavbarProps) {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Magnetic strength={0.2}>
-          <a href="#" className="flex items-center gap-2 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-neon-purple/10 border border-neon-purple/20 transition-all group-hover:bg-neon-purple/20">
-              <span className="font-mono text-sm font-bold text-neon-purple">F</span>
+          <a href="#" className="flex items-center gap-3 group">
+            <div className="relative h-9 w-9 overflow-hidden rounded-lg border border-neon-purple/20 transition-all group-hover:border-neon-purple/40">
+              {mounted && (
+                <img
+                  src={theme === "dark" ? "/icon-dark.png" : "/icon-light.png"}
+                  alt="Finora Logo"
+                  className="h-full w-full object-cover"
+                />
+              )}
             </div>
-            <span className="text-lg font-semibold tracking-tight text-foreground">Finora</span>
+            <span className="text-xl font-bold tracking-tight text-foreground">Finora</span>
           </a>
         </Magnetic>
 
