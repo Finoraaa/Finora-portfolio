@@ -4,7 +4,7 @@ import { db } from "@/lib/db"
 import { projects } from "@/lib/db/schema"
 import { eq, desc } from "drizzle-orm"
 import { isAdminAuthenticated } from "@/lib/admin-auth"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, unstable_noStore as noStore } from "next/cache"
 
 async function checkAuth() {
     const authed = await isAdminAuthenticated()
@@ -12,6 +12,7 @@ async function checkAuth() {
 }
 
 export async function getProjects() {
+    noStore()
     return db.select().from(projects).orderBy(projects.sortOrder)
 }
 
