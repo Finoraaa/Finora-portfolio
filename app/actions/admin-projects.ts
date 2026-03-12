@@ -13,7 +13,14 @@ async function checkAuth() {
 
 export async function getProjects() {
     noStore()
-    return db.select().from(projects).orderBy(projects.sortOrder)
+    try {
+        const result = await db.select().from(projects).orderBy(projects.sortOrder)
+        console.log("Projects fetched successfully:", result.length)
+        return result
+    } catch (error) {
+        console.error("DATABASE_ERROR in getProjects:", error)
+        return []
+    }
 }
 
 export async function getProjectById(id: number) {
