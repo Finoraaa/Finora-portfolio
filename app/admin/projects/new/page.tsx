@@ -1,0 +1,9 @@
+import { ProjectForm } from "@/components/admin/ProjectForm"
+
+export default function NewProjectPage() {
+    return (
+        <div className="p-8 bg-background min-h-screen">
+            <ProjectForm />
+        </div>
+    )
+}
